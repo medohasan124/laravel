@@ -1,0 +1,163 @@
+=====================================
+========== form validation ==========
+=====================================
+* form validation 
+to make condision to  user 
+
+1: create route 
+2: create controller validation(request $request){}
+// to show the requests
+$request['username'] // mohamed
+$request->all() // username must me required...
+///////////////////////////////////////
+
+//to set validation  
+
+1: $this->validate( $request , []);
+2: att arry [] //
+	'username' => 'required|max:20|min:10' ,
+	'password' => 'required' ,
+	'email'    => 'required|email'
+
+3: to shiw this validation
+1: go to view
+2: @if( count($errors) > 0)
+		@foreach($errors->all() as $error)
+			<p>{{$error}}</p>
+		@endif
+   @endif
+
+/////////////////////////////////////////
+* to set old value to form
+{{old('username')}}
+
+
+===========================================
+============= database ====================
+===========================================
+
+* first set migration file
+1: php artisan make:migration admin
+// he sitting ther migration
+//////// set database informiton
+2: .env
+DB_CONNECTION=sqlite
+DB_DATABASE=database/user.sqlite
+////////////////////////////////////////
+
+3: php artisan migrate
+////////////////////////
+// if i edit the migration
+   php artisan migrate:refresh
+// of i delete table
+	php artisan migrate:fresh
+///////////////////////////////////////////  
+
+=========================================
+=========== Login & register ============
+=========================================
+
+* first need to install node
+1: install node
+2: npm install , npm run dev
+3: php artisan ui vue --auth
+// you well see the login page
+//////////////////////////////////////
+
+////// connect database //////////////
+
+1: comment the name database in .env
+2: go to config / database name ad sqlite database
+//////////////////////////////////////
+
+1 : fisrt make multi authintkation
+//  if (!Auth::guard($guard)->check()) {
+           
+             return redirect('admin/login');
+        }
+          return $next($request);
+       
+    }
+//////////////////////////////////////////
+
+route is 
+Route::group( ['middleware' => 'admin:Admins'] , function(){
+
+		Route::get('/' , 'Admins@index')->name('dashboard');
+
+	});
+
+// the guard is Admins
+///////////////////////////////////////////////
+at controller 
+ if(Auth::guard('Admins')->attempt(['email' => request('email') , 'password' => request('password') ] , $remember )){
+          return redirect('admin');
+
+
+
+================================
+======== login from admin ======
+================================
+
+1: route prefix by admin
+2: to make controller Admin in folder Admin
+  // at route ['namespace' => 'admin']
+
+3: make route for login & route for dashboard 
+
+4: make new middleware
+	// Route:goup( ['middleware' => 'admin'], function(){});
+	// php artisan make:middleware admin
+ * at middleware admin //test this middlweare
+
+5: create gurad for middlware
+	//if you have error clear config
+
+set guard at 
+	*: Route::group(['middleware' => 'Admin:AdminGuard'] 
+	at  controller 
+	if(Auth::guard('AdminGuard')->attempt(['email' => $email
+///////////////////////////////////////////////////////////
+====================================================
+============== staer vue with laravel ==============
+====================================================
+1: go to laravel ne
+ * npm laravel/ul
+ * npm install
+ * npm run dev
+ * npm run watch
+2: you can see modul folder
+3: create components test
+4: go to app.js and import components
+5: at welcome page add 
+						<div id="app">
+							<myheader />
+						</app>
+6: add app.css & app.js 
+================================================
+=========== create router folder ===============
+================================================
+1: create components , login , rejester , post
+2: create components header and add to page
+3: create routes.js 
+4: at route.js 
+	* //import components , login , rejester , post
+	* const routes = [
+		  { path: '/login', component:login },
+		]
+	* export default routes
+5: at app.js 
+	* import VueRouter from 'vue-router';
+	* Vue.use(VueRouter);
+	* const router = new VueRouter({
+		mode:'history',
+  		routes // short for `routes: routes`
+		})
+	* //add router to 
+		const app = new Vue({
+	    el: '#app',
+	    	router,
+	 	components:{headers}
+
+		});
+=========================================================
